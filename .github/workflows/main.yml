@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Deploy Main Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands and pulling code
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.PROD_SERVER}}
+          username: ${{ secrets.PROD_AWS_USER_NAME }}
+          key: ${{secrets.PROD_AWS_SERVER_KEY}}
+          port: 22
+          script: |
+            cd server
+            git checkout main
+            bash setup.sh 
+            exit
